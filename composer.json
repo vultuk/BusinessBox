@@ -1,0 +1,26 @@
+{
+    "name": "vultuk/businessbox",
+    "description": "API Integration with 'Your Business in a Box'",
+    "require": {
+        "php": ">=5.6",
+        "guzzle/guzzle": "^3.9",
+        "nesbot/carbon": "^1.20"
+    },
+    "require-dev": {
+        "phpspec/phpspec": "~2.1",
+        "mockery/mockery": "^0.9.4"
+    },
+    "autoload": {
+        "psr-0": {
+            "": "src"
+        }
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Simon Skinner",
+            "email": "s.skinner@tech3k.co.uk"
+        }
+    ],
+    "minimum-stability": "stable"
+}
