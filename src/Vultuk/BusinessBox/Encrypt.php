@@ -7,60 +7,63 @@ use Vultuk\BusinessBox\Contracts\Encrypt as EncryptContract;
 class Encrypt implements EncryptContract
 {
 
-    protected $apiVersion = 1;
+    protected $apiVersion;
 
-    protected $publicKey = '';
+    protected $publicKey;
 
-    protected $secretKey = '';
+    protected $secretKey;
 
-    protected $data = null;
+    protected $data;
 
-    public static function encrypt()
+    public static function encrypt($data, $publicKey, $secretKey, $apiVersion = 1)
     {
+        $encrypt = new self($data, $publicKey, $secretKey, $apiVersion);
 
-
-        $ciphertext = encrypt_aes128($secret_key, $data, false);
-        $signature = hmac_sha256($secret_key, $ciphertext, false);
-        return $this->apiVersion."/".$this->publicKey."\n".$ciphertext."\n".$signature."\n";
+        return $encrypt->encryptData($data);
     }
 
-    protected function encode($secret_key, $method, $keysize_bits, $data, $raw_output = false)
+    public function encryptData($data)
     {
-        $key = substr($secret_key, 0, $keysize_bits/8);
+        $this->data = $data;
 
-        $iv_size = mcrypt_get_iv_size($method, MCRYPT_MODE_CBC);
-        $iv = mcrypt_create_iv($iv_size, MCRYPT_DEV_URANDOM);
+        $cipherText = $this->encodeData(128, $this->data);
+        $signature = $this->encodeHmac(512, $cipherText);
 
-        $ciphertext = $iv.mcrypt_encrypt($method, $key, $data, MCRYPT_MODE_CBC, $iv);
-
-        if (!$raw_output) { return base64_encode($ciphertext); }
-
-        return $ciphertext;
+        return $this->apiVersion."/".$this->publicKey."\n".$cipherText."\n".$signature."\n";
     }
 
-    protected function encryptAes($bits)
+    protected function encodeData($bitSize, $data, $raw_output = false)
     {
-        return $this->encode()
+        $method = ($bitSize == 192) ? MCRYPT_RIJNDAEL_192 : MCRYPT_RIJNDAEL_128;
+        $key = substr($this->secretKey, 0, $bitSize/8);
+
+        $iv = mcrypt_create_iv(
+            mcrypt_get_iv_size(
+                $method,
+                MCRYPT_MODE_CBC
+            ),
+            MCRYPT_DEV_URANDOM
+        );
+
+        $data = $iv.mcrypt_encrypt(
+            $method,
+            $key,
+            $data,
+            MCRYPT_MODE_CBC,
+            $iv
+        );
+
+        if (!$raw_output)
+        {
+            $data = base64_encode($data);
+        }
+
+        return $data;
     }
 
-    protected function encrypt_aes192($secret_key, $data, $raw_output=false)
+    protected function encodeHmac($blocksize, $data, $raw_output=false)
     {
-        return $this->encode($secret_key, MCRYPT_RIJNDAEL_192, 24*8, $data, $raw_output);
-    }
-
-    protected function encrypt_aes128($secret_key, $data, $raw_output=false)
-    {
-        return $this->encode($secret_key, MCRYPT_RIJNDAEL_128, 16*8, $data, $raw_output);
-    }
-
-    protected function hmac_sha256($secret_key, $data, $raw_output=false)
-    {
-        return $this->hmac($secret_key, 'sha256', 512, $data, $raw_output);
-    }
-    
-    protected function hmac($secret_key, $hashfunc, $blocksize, $data, $raw_output=false)
-    {
-        $key  = $this->hexToBinary($secret_key);
+        $key  = $this->hexToBinary($this->secretKey);
 
         if (strlen($key) != ($blocksize/8)) { throw new \Exception('invalid secret key block size'); }
 
@@ -76,7 +79,7 @@ class Encrypt implements EncryptContract
             $i_key_pad .= chr(ord(substr($key,$i,1)) ^ $ipad);
         }
 
-        return hash($hashfunc, $o_key_pad.hash($hashfunc, $i_key_pad.$data, true), $raw_output);
+        return hash('sha256', $o_key_pad.hash('sha256', $i_key_pad.$data, true), $raw_output);
     }
 
     protected function hexToBinary($string)
@@ -84,9 +87,11 @@ class Encrypt implements EncryptContract
         return pack('H*', $string);
     }
 
-    public function __construct($data = null)
+    public function __construct($publicKey, $secretKey, $apiVersion = 1)
     {
-        $this->data = $data;
+        $this->publicKey = $publicKey;
+        $this->secretKey = $secretKey;
+        $this->apiVersion = $apiVersion;
     }
 
 }

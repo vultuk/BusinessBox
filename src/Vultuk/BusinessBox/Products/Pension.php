@@ -10,6 +10,6 @@ class Pension extends Product implements ProductContract
 {
     use Arrayable;
 
-
+    public $key = 'pension';
 
 }

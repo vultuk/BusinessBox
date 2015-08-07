@@ -5,4 +5,6 @@ interface Product
 
     public function toArray();
 
+    public function getKey();
+
 }
