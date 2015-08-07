@@ -9,20 +9,20 @@ $url = 'http://yourbusinessinabox.co.uk';
 $publicKey = 'publickey';
 $privateKey = 'privatekey';
 
-$result = \Vultuk\BusinessBox\Remote::request(
-        \Vultuk\BusinessBox\Client::create([
+$result = Remote::request(
+        Client::create([
             'title' => 'Mr',
         ]),
-        \Vultuk\BusinessBox\Products\Pension::create([
+        Pension::create([
             'title' => 'Mr',
         ]),
-        \Vultuk\BusinessBox\Appointment::create(
+        Appointment::create(
             new \Carbon\Carbon('2015-11-01 09:20'),
             'Knock Loudly'
         ),
         $urn,
         $url,
-        new \Vultuk\BusinessBox\Encrypt(
+        new Encrypt(
             $publicKey,
             $privateKey
         )
