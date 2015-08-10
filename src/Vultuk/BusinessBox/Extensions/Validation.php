@@ -64,7 +64,7 @@ trait Validation {
         if (in_array('required', $fieldDetails) && empty($this->$fieldGetter()))
         {
             throw new ValidationException(
-                "Required field '". end(explode('\\', get_class($this))) . ':' .$fieldKey."' has not been set."
+                "Required field '" .$fieldKey."' has not been set."
             );
         }
 
