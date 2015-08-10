@@ -13,10 +13,10 @@ trait Validation {
             {
                 $fieldDetails = explode('|', $fieldDetails);
 
-                $this->checkForRequiredFields($fieldKey, $fieldDetails);
+                $this->checkForRequiredFields($fieldKey, $fieldDetails)
+                    ->checkTypes($fieldKey, $fieldDetails);
             }
         }
-
 
         return $this;
     }
@@ -31,13 +31,30 @@ trait Validation {
             {
                 $type = substr($item, 5);
 
-                if ($type == 'bool')
-
-                switch ($this->$fieldGetter()) {
-                    case
+                if (($type == 'bool' || $type == 'boolean') && (!is_bool($this->$fieldGetter()) || !in_array($this->$fieldGetter(), ['Yes', 'No'])))
+                {
+                    throw new \UnexpectedValueException($fieldKey . ' must be a Boolean or Yes / No.');
                 }
+
+                if ( ($type == 'int' || $type == 'integer') && !is_integer($this->$fieldGetter()) )
+                {
+                    throw new \UnexpectedValueException($fieldKey . ' must be an integer.');
+                }
+
+                if ( ($type == 'str' || $type == 'string') && !is_string($this->$fieldGetter()) )
+                {
+                    throw new \UnexpectedValueException($fieldKey . ' must be a string.');
+                }
+
+                if ( $type == 'email' && !filter_var($this->$fieldGetter(), FILTER_VALIDATE_EMAIL) )
+                {
+                    throw new \UnexpectedValueException($fieldKey . ' must be a valid email address.');
+                }
+
             }
         }
+
+        return $this;
     }
 
     protected function checkForRequiredFields($fieldKey, array $fieldDetails)

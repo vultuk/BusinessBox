@@ -20,18 +20,31 @@ class Remote
 
     protected $encryptor = null;
 
-    public function send(ClientContract $client, ProductContract $product, AppointmentContract $appointment)
+    public function send(ClientContract $client, ProductContract $product = null, AppointmentContract $appointment = null)
     {
-        $contentBody = json_encode([
-            'client' => $client->toArray(),
-            $product->getKey() => $product->toArray(),
-            'appointment' => $appointment->toArray(),
-        ]);
+        $contentBody = [];
+
+        if (empty($client))
+        {
+            throw new \UnexpectedValueException('Client Details must be specified');
+        }
+
+        $contentBody['client'] = $client->toArray();
+
+        if (!empty($product))
+        {
+            $contentBody[$product->getKey()] = $product->toArray();
+        }
+
+        if (!empty($appointment))
+        {
+            $contentBody['appointment'] = $appointment->toArray();
+        }
 
         $result = $this->guzzleClient->post(
             $this->url . "/" . $this->urn,
             null,
-            empty($this->encryptor) ? $contentBody : $this->encryptor->encryptData($contentBody)
+            empty($this->encryptor) ? $contentBody : $this->encryptor->encryptData(json_encode($contentBody))
         );
 
         return $result->send();
@@ -40,8 +53,8 @@ class Remote
     
     public static function request(
         ClientContract $client,
-        ProductContract $product,
-        AppointmentContract $appointment,
+        ProductContract $product = null,
+        AppointmentContract $appointment = null,
         $urn,
         $url,
         EncryptContract $encryptor = null)
