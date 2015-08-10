@@ -31,7 +31,7 @@ trait Validation {
             {
                 $type = substr($item, 5);
 
-                if (!empty($this->$fieldGetter()) && ($type == 'bool' || $type == 'boolean') && (!is_bool($this->$fieldGetter()) || !in_array($this->$fieldGetter(), ['Yes', 'No'])))
+                if (!empty($this->$fieldGetter()) && ($type == 'bool' || $type == 'boolean') && (!is_bool($this->$fieldGetter()) && !in_array($this->$fieldGetter(), ['Yes', 'No'])))
                 {
                     throw new \UnexpectedValueException($fieldKey . ' must be a Boolean or Yes / No.');
                 }
