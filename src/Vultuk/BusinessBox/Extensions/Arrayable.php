@@ -7,6 +7,9 @@ trait Arrayable
 
     public function toArray()
     {
+        // Check everything is validated before the transform
+        $this->validate();
+
         return $this->arrayData;
     }
 

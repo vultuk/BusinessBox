@@ -5,10 +5,12 @@ namespace Vultuk\BusinessBox;
 use Carbon\Carbon;
 use Vultuk\BusinessBox\Contracts\Appointment as AppointmentContract;
 use Vultuk\BusinessBox\Extensions\Arrayable;
+use Vultuk\BusinessBox\Extensions\MagicSetter;
+use Vultuk\BusinessBox\Extensions\Validation;
 
 class Appointment implements AppointmentContract
 {
-    use Arrayable;
+    use Arrayable, MagicSetter, Validation;
 
     public function setAppointmentDateTime(Carbon $date)
     {
