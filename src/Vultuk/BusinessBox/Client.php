@@ -34,7 +34,7 @@ class Client implements ClientContract
         'next_of_kin_relation',
     ];
 
-    public function combineAddress(...$lines)
+    public static function combineAddress(...$lines)
     {
         return implode(', ', $lines);
     }

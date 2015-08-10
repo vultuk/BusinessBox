@@ -5,6 +5,6 @@ interface Client
 
     public function toArray();
 
-    public function combineAddress(...$lines);
+    public static function combineAddress(...$lines);
     
 }
