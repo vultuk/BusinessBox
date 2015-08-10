@@ -34,6 +34,11 @@ class Client implements ClientContract
         'next_of_kin_relation',
     ];
 
+    public function combineAddress(...$lines)
+    {
+        return implode(', ', $lines);
+    }
+
     public static function create(array $allDetails)
     {
         $product = new static();
