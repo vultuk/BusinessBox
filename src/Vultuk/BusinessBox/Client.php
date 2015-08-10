@@ -36,7 +36,17 @@ class Client implements ClientContract
 
     public static function combineAddress(...$lines)
     {
-        return implode(', ', $lines);
+        $fullAddress = [];
+
+        foreach ($lines as $line)
+        {
+            if (!empty($line) && strlen($line) > 1)
+            {
+                $fullAddress[] = $line;
+            }
+        }
+
+        return implode(', ', $fullAddress);
     }
 
     public static function create(array $allDetails)
