@@ -11,6 +11,7 @@ class Pension extends Product implements ProductContract
     public $key = 'pension';
 
     protected $fields = [
+        'reference' => 'type:string',
         'would_you_like_a_review' => 'type:bool',
         'is_civil_service' => 'type:bool',
         'is_sipp_or_sass_liquid' => 'type:bool',
