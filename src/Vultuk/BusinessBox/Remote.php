@@ -2,7 +2,7 @@
 
 namespace Vultuk\BusinessBox;
 
-use Guzzle\Http\Client;
+use Guzzle\Http\Client as GuzzleClient;
 use Vultuk\BusinessBox\Contracts\Appointment as AppointmentContract;
 use Vultuk\BusinessBox\Contracts\Client as ClientContract;
 use Vultuk\BusinessBox\Contracts\Encrypt as EncryptContract;
@@ -67,7 +67,7 @@ class Remote
     public function __construct($urn, $url, EncryptContract $encryptor = null)
     {
         // Instantiate the Guzzle Library
-        $this->guzzleClient = new Client();
+        $this->guzzleClient = new GuzzleClient();
 
         // Make sure that we pass an URL
         if (empty($url))
