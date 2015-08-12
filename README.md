@@ -6,8 +6,8 @@ Integration with Business in a Box API
 ### Creating an Encryption object
 ```
 $encrypt = new Encrypt(
-   '123456789',
-   '123456789123456789123456789123456789123456789123456789',
+   '123456789',   // Public Key
+   '123456789123456789123456789123456789123456789123456789',   // Secret Key
 )
 ```
 
