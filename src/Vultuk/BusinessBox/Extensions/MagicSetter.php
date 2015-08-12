@@ -1,7 +1,20 @@
 <?php namespace Vultuk\BusinessBox\Extensions;
 
+/**
+ * Magic methods that can be used for any class
+ *
+ * Class MagicSetter
+ * @package Vultuk\BusinessBox\Extensions
+ */
 trait MagicSetter {
 
+    /**
+     * Used to Get and Set any data in the class it extends
+     *
+     * @param $name
+     * @param $arguments
+     * @return $this|null
+     */
     public function __call($name, $arguments)
     {
         // Check if we are trying a set function

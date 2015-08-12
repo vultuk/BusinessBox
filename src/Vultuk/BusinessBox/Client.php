@@ -7,10 +7,21 @@ use Vultuk\BusinessBox\Extensions\Arrayable;
 use Vultuk\BusinessBox\Extensions\MagicSetter;
 use Vultuk\BusinessBox\Extensions\Validation;
 
+/**
+ * Class Client
+ * @package Vultuk\BusinessBox
+ */
 class Client implements ClientContract
 {
     use Arrayable, MagicSetter, Validation;
 
+    /**
+     * Stores all the fields that can be sent for a client where key is the
+     * property used in the API and the value is a | separated list of strings
+     * showing if fields are required and the respective type
+     *
+     * @var array
+     */
     protected $fields = [
         'title',
         'first_name' => 'required',
@@ -34,6 +45,12 @@ class Client implements ClientContract
         'next_of_kin_relation',
     ];
 
+    /**
+     * Combines multiple lines of an address into a comma separated single line
+     *
+     * @param ...$lines
+     * @return string
+     */
     public static function combineAddress(...$lines)
     {
         $fullAddress = [];
@@ -49,6 +66,12 @@ class Client implements ClientContract
         return implode(', ', $fullAddress);
     }
 
+    /**
+     * Creates a client from all the details given in an array
+     *
+     * @param array $allDetails
+     * @return static
+     */
     public static function create(array $allDetails)
     {
         $product = new static();

@@ -5,11 +5,29 @@ namespace Vultuk\BusinessBox\Products;
 use Vultuk\BusinessBox\Contracts\Product as ProductContract;
 use Vultuk\BusinessBox\Product;
 
+/**
+ * Class built for the Pension product
+ *
+ * Class Pension
+ * @package Vultuk\BusinessBox\Products
+ */
 class Pension extends Product implements ProductContract
 {
 
+    /**
+     * The key that is used when this product is sent to the API
+     *
+     * @var string
+     */
     public $key = 'pension';
 
+    /**
+     * Stores all the fields that can be sent for the product where key is the
+     * property used in the API and the value is a | separated list of strings
+     * showing if fields are required and the respective type
+     *
+     * @var array
+     */
     protected $fields = [
         'reference' => 'type:string',
         'would_you_like_a_review' => 'type:bool',

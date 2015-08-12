@@ -2,8 +2,17 @@
 
 use Guzzle\Service\Exception\ValidationException;
 
+/**
+ * Class Validation
+ * @package Vultuk\BusinessBox\Extensions
+ */
 trait Validation {
 
+    /**
+     * Method that is ran to complete all required validation
+     *
+     * @return $this
+     */
     protected function validate()
     {
 
@@ -21,6 +30,14 @@ trait Validation {
         return $this;
     }
 
+    /**
+     * Method to ensure that all fields have been submitted in the correct
+     * types
+     *
+     * @param $fieldKey
+     * @param array $fieldDetails
+     * @return $this
+     */
     protected function checkTypes($fieldKey, array $fieldDetails)
     {
         $fieldGetter = 'get' . $fieldKey;
@@ -57,6 +74,13 @@ trait Validation {
         return $this;
     }
 
+    /**
+     * Method to check that all required fields have been submitted
+     *
+     * @param $fieldKey
+     * @param array $fieldDetails
+     * @return $this
+     */
     protected function checkForRequiredFields($fieldKey, array $fieldDetails)
     {
         $fieldGetter = 'get' . $fieldKey;
